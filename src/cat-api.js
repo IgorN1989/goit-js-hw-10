@@ -1,5 +1,11 @@
-function fetchCatsList(url) {
-  fetch(url)
+import axios from 'axios';
+// console.log(axios);
+
+const URL_OF_LIST = 'https://api.thecatapi.com/v1/breeds';
+const axios = re
+
+function fetchCatsList() {
+  fetch(URL_OF_LIST)
     .then(response => response.json())
     .then(data =>
       refs.select.insertAdjacentHTML('beforeend', addOptions(data))

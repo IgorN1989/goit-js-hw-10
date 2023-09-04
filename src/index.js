@@ -1,5 +1,4 @@
-import axios from 'axios';
-// console.log(axios);
+
 import { fetchCatsList, fetchCatByBreed } from './cat-api';
 console.log(fetchCatsList);
 console.log(fetchCatByBreed);
@@ -16,7 +15,7 @@ const refs = {
   info: document.querySelector('.cat-info  '),
 };
 
-const BASE_URL = 'https://api.thecatapi.com/v1/breeds';
+
 
 // fetchCatsList(BASE_URL);
 
