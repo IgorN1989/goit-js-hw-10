@@ -1,29 +1,30 @@
-
-import { fetchCatsList, fetchCatByBreed } from './cat-api';
-console.log(fetchCatsList);
-console.log(fetchCatByBreed);
-
-// axios.defaults.headers.common['x-api-key'] =
-//   'live_OLk1RycgcWv2xBkEUGVJtAj6KrGstFwR9QZRnnjj8HNyEgldoS7QordoNgkDvqzx';
-
-// const API_KEY =
-//   'live_OLk1RycgcWv2xBkEUGVJtAj6KrGstFwR9QZRnnjj8HNyEgldoS7QordoNgkDvqzx';
-// //   'x-api-key';
+import { fetchBreeds, fetchCatByBreed } from './js/cat-api';
+import { createCardMarkup } from './js/cardmarkup';
+import './sass/index.scss';
 
 const refs = {
   select: document.querySelector('.breed-select'),
-  info: document.querySelector('.cat-info  '),
+  info: document.querySelector('.cat-info'),
+  loader: document.querySelector('.loader'),
+  error: document.querySelector('.error'),
 };
 
+hideElements(refs.select);
+hideElements(refs.error);
+hideElements(refs.info);
 
+fetchBreeds()
+  .then(data => {
+    refs.select.insertAdjacentHTML('beforeend', addOptions(data));
+    showElement(refs.select);
+    hideElements(refs.loader);
+  })
+  .catch(error => {
+    showElement(refs.error);
+    hideElements(refs.loader);
+  });
 
-// fetchCatsList(BASE_URL);
-
-refs.select.addEventListener('change', () => {
-  fetchCatByBreed(refs.select.value);
-
-  // createMarkup(fetchCatByBreed(refs.select.value));
-});
+refs.select.addEventListener('change', onSelect);
 
 function addOptions(arr) {
   return arr
@@ -31,6 +32,32 @@ function addOptions(arr) {
     .join('');
 }
 
-function createMarkup(arr) {
-  console.log(arr);
+function onSelect(evt) {
+  showElement(refs.loader);
+
+  fetchCatByBreed(evt.currentTarget.value)
+    .then(data => {
+      hideElements(refs.loader);
+      showElement(refs.info);
+      const { imgUrl, name, description, temperament } = data;
+
+      refs.info.innerHTML = createCardMarkup(
+        imgUrl,
+        name,
+        description,
+        temperament
+      );
+    })
+    .catch(error => {
+      showElement(refs.error);
+      hideElements(refs.loader);
+    });
+}
+
+function hideElements(element) {
+  element.classList.add('is-hidden');
+}
+
+function showElement(element) {
+  element.classList.remove('is-hidden');
 }
