@@ -1,6 +1,6 @@
-import SlimSelect from 'slim-select';
-import 'slim-select/dist/slimselect.css';
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
+// import SlimSelect from 'slim-select';
+// import 'slim-select/dist/slimselect.css';
+// import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { fetchBreeds, fetchCatByBreed } from './js/cat-api';
 import { createCardMarkup } from './js/cardmarkup';
 
@@ -18,9 +18,9 @@ hideElements(refs.info);
 fetchBreeds()
   .then(data => {
     refs.select.insertAdjacentHTML('beforeend', addOptions(data));
-    new SlimSelect({
-      select: refs.select,
-    });
+    // new SlimSelect({
+    //   select: refs.select,
+    // });
     showElement(refs.select);
     hideElements(refs.loader);
   })
@@ -28,7 +28,7 @@ fetchBreeds()
     console.log(error);
     showElement(refs.error);
     hideElements(refs.loader);
-    Notify.failure(`Oops! Something went wrong! Try reloading the page!`);
+    // Notify.failure(`Oops! Something went wrong! Try reloading the page!`);
   });
 
 refs.select.addEventListener('change', onSelect);
@@ -59,7 +59,7 @@ function onSelect(evt) {
       console.log(error);
       showElement(refs.error);
       hideElements(refs.loader);
-      Notify.failure(`Oops! Something went wrong! Try reloading the page!`);
+      // Notify.failure(`Oops! Something went wrong! Try reloading the page!`);
     });
 }
 
