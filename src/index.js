@@ -1,35 +1,27 @@
-// import SlimSelect from 'slim-select';
-// import 'slim-select/dist/slimselect.css';
-// import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import SlimSelect from 'slim-select';
+import 'slim-select/dist/slimselect.css';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { fetchBreeds, fetchCatByBreed } from './js/cat-api';
 import { createCardMarkup } from './js/cardmarkup';
 
 const refs = {
   select: document.querySelector('.breed-select'),
   info: document.querySelector('.cat-info'),
-  loader: document.querySelector('.loader'),
-  error: document.querySelector('.error'),
+  loaderContainer: document.querySelector('.loader-container'),
 };
-
-hideElements(refs.select);
-hideElements(refs.error);
-hideElements(refs.info);
 
 fetchBreeds()
   .then(data => {
     refs.select.insertAdjacentHTML('beforeend', addOptions(data));
-    // new SlimSelect({
-    //   select: refs.select,
-    // });
+    new SlimSelect({
+      select: refs.select,
+    });
     showElement(refs.select);
-    hideElements(refs.loader);
   })
-  .catch(error => {
-    console.log(error);
-    showElement(refs.error);
-    hideElements(refs.loader);
-    // Notify.failure(`Oops! Something went wrong! Try reloading the page!`);
-  });
+  .catch(() => {
+    Notify.failure(`Oops! Something went wrong! Try reloading the page!`);
+  })
+  .finally(() => hideElement(refs.loaderContainer));
 
 refs.select.addEventListener('change', onSelect);
 
@@ -40,13 +32,17 @@ function addOptions(arr) {
 }
 
 function onSelect(evt) {
-  showElement(refs.loader);
+  showElement(refs.loaderContainer);
 
   fetchCatByBreed(evt.currentTarget.value)
     .then(data => {
-      hideElements(refs.loader);
       showElement(refs.info);
-      const { imgUrl, name, description, temperament } = data;
+      const {
+        imgUrl = 'https://logowik.com/content/uploads/images/cat8600.jpg',
+        name,
+        description,
+        temperament,
+      } = data;
 
       refs.info.innerHTML = createCardMarkup(
         imgUrl,
@@ -55,18 +51,16 @@ function onSelect(evt) {
         temperament
       );
     })
-    .catch(error => {
-      console.log(error);
-      showElement(refs.error);
-      hideElements(refs.loader);
-      // Notify.failure(`Oops! Something went wrong! Try reloading the page!`);
-    });
+    .catch(() => {
+      Notify.failure(`Oops! Something went wrong! Try reloading the page!`);
+    })
+    .finally(() => hideElement(refs.loaderContainer));
 }
 
-function hideElements(element) {
-  element.classList.add('is-hidden');
+function hideElement(element) {
+  element.hidden = true;
 }
 
 function showElement(element) {
-  element.classList.remove('is-hidden');
+  element.hidden = false;
 }
