@@ -2,7 +2,7 @@ import SlimSelect from 'slim-select';
 import 'slim-select/dist/slimselect.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { fetchBreeds, fetchCatByBreed } from './js/cat-api';
-import { createCardMarkup } from './js/cardmarkup';
+import { createOptionMarkup, createCardMarkup } from './js/markup';
 
 const refs = {
   select: document.querySelector('.breed-select'),
@@ -16,11 +16,7 @@ hideElement(refs.info);
 
 fetchBreeds()
   .then(data => {
-    refs.select.insertAdjacentHTML(
-      'beforeend',
-      '<option data-placeholder="true"></option>'
-    );
-    refs.select.insertAdjacentHTML('beforeend', addOptions(data));
+    refs.select.insertAdjacentHTML('beforeend', createOptionMarkup(data));
 
     new SlimSelect({
       select: refs.select,
@@ -40,12 +36,6 @@ fetchBreeds()
   });
 
 refs.select.addEventListener('change', onSelect);
-
-function addOptions(arr) {
-  return arr
-    .map(({ id, name }) => `<option value="${id}">${name}</option>`)
-    .join('');
-}
 
 function onSelect(evt) {
   showElement(refs.loaderContainer);
