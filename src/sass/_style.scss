@@ -8,6 +8,7 @@ body {
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+  column-gap: 1500px;
 }
 
 body.empty {
@@ -19,6 +20,7 @@ body.empty {
 
 .breed-select {
 max-width: 800px;
+
 }
 
 .cat-info-container {
