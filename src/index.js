@@ -10,6 +10,8 @@ const refs = {
   loaderContainer: document.querySelector('.loader-container'),
 };
 
+hideElement(refs.select);
+
 fetchBreeds()
   .then(data => {
     refs.select.insertAdjacentHTML('beforeend', addOptions(data));
