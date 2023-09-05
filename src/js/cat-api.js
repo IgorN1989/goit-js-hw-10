@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { axios } from 'axios';
 
 const URL_OF_BREEDS = 'https://api.thecatapi.com/v1/breeds';
 const URL_OF_SEARCH = 'https://api.thecatapi.com/v1/images/search';
