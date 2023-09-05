@@ -54,6 +54,7 @@ function onSelect(evt) {
       );
     })
     .catch(() => {
+      refs.info.innerHTML = '';
       Notify.failure(`Oops! Something went wrong! Try reloading the page!`);
     })
     .finally(() => hideElement(refs.loaderContainer));
