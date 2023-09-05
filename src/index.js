@@ -16,13 +16,19 @@ hideElement(refs.info);
 
 fetchBreeds()
   .then(data => {
+    refs.select.insertAdjacentHTML(
+      'beforeend',
+      '<option data-placeholder="true"></option>'
+    );
     refs.select.insertAdjacentHTML('beforeend', addOptions(data));
+
     new SlimSelect({
       select: refs.select,
       settings: {
         placeholderText: 'Choose breed',
       },
     });
+
     showElement(refs.select);
   })
   .catch(() => {
@@ -72,5 +78,3 @@ function hideElement(element) {
 function showElement(element) {
   element.hidden = false;
 }
-
-console.dir(SlimSelect);
