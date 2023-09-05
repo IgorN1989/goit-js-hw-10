@@ -8,22 +8,30 @@ const refs = {
   select: document.querySelector('.breed-select'),
   info: document.querySelector('.cat-info'),
   loaderContainer: document.querySelector('.loader-container'),
+  body: document.querySelector('body'),
 };
 
 hideElement(refs.select);
+hideElement(refs.info);
 
 fetchBreeds()
   .then(data => {
     refs.select.insertAdjacentHTML('beforeend', addOptions(data));
     new SlimSelect({
       select: refs.select,
+      settings: {
+        placeholderText: 'Choose breed',
+      },
     });
     showElement(refs.select);
   })
   .catch(() => {
     Notify.failure(`Oops! Something went wrong! Try reloading the page!`);
   })
-  .finally(() => hideElement(refs.loaderContainer));
+  .finally(() => {
+    hideElement(refs.loaderContainer);
+    refs.body.classList.add('empty');
+  });
 
 refs.select.addEventListener('change', onSelect);
 
@@ -39,12 +47,7 @@ function onSelect(evt) {
   fetchCatByBreed(evt.currentTarget.value)
     .then(data => {
       showElement(refs.info);
-      const {
-        imgUrl = 'https://logowik.com/content/uploads/images/cat8600.jpg',
-        name,
-        description,
-        temperament,
-      } = data;
+      const { imgUrl, name, description, temperament } = data;
 
       refs.info.innerHTML = createCardMarkup(
         imgUrl,
@@ -52,10 +55,12 @@ function onSelect(evt) {
         description,
         temperament
       );
+      refs.body.classList.remove('empty');
     })
     .catch(() => {
       refs.info.innerHTML = '';
-      Notify.failure(`Oops! Something went wrong! Try reloading the page!`);
+      refs.body.classList.add('empty');
+      Notify.failure(`Oops! Something went wrong! Choose another breed!`);
     })
     .finally(() => hideElement(refs.loaderContainer));
 }
@@ -67,3 +72,5 @@ function hideElement(element) {
 function showElement(element) {
   element.hidden = false;
 }
+
+console.dir(SlimSelect);
